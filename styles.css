@@ -34,19 +34,20 @@ body {
   flex-direction: column;
 }
 .tweet {
-    background-color: #e8e8e8;
-    max-width: 600px;
-    padding: 16px;
-    font-family: sans-serif;
-    font-size: 1.2em;
-    border: 2px solid black;
-    border-radius: 16px;
+  background-color: #e8e8e8;
+  max-width: 600px;
+  padding: 16px;
+  font-family: sans-serif;
+  font-size: 1.2em;
+  border: 2px solid black;
+  border-radius: 16px;
 }
 .tweet img {
   max-height: 100%;
   vertical-align: bottom;
-  width: 100%;
-  object-fit: cover;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain; /* Evita que la imagen se recorte */
 }
 .tweet video {
   max-height: 100%;
@@ -62,9 +63,9 @@ body {
   margin-bottom: 0px;
 }
 .tweet li {
-  height: 20vh;
-  width: 20vh;
-  flex-grow: 1;
+  height: auto;
+  width: auto;
+  max-width: 100%;
 }
 .tweet .display_name {
   margin-bottom: 0;
@@ -102,9 +103,9 @@ body {
 }
 @media screen and (max-width: 599px) {
   .tweet li {
-    height: 15vh;
-    width: 15vh;
-    flex-grow: 1;
+    height: auto;
+    width: auto;
+    max-width: 100%;
   }
 }
 @media(prefers-color-scheme: dark) {
