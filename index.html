@@ -10,11 +10,11 @@
 <body>
   <div class="wrapper">
     <div class="flex-wrap">
-      <h1>Welcome to the @Sign_in_music Twitter archive</h1>
-      <p>This is a page where you can search many of my tweets, get a link to an archived version, and view all the content in nice, threaded form where applicable. This does not include replies to other people in this archive, so this is just "standalone" tweets and threads.</p>
+      <h1>Bienvenido al archivo de @Sign_in_music en Twitter</h1>
+      <p>En esta puedes buscar muchos de mis tweets y obtener un enlace a una versión archivada. Esto no incluye las respuestas a otras personas en este archivo, por lo que se trata de tweets e hilos «independientes».</p>
       <div class="tweet">
         <p id="tabs">
-          <button class="tab active" id="search-tab" onclick="searchTab()">Search</button><button class="tab" id="browse-tab" onclick="browseTab()">Browse</button>
+          <button class="tab active" id="browse-tab" onclick="browseTab()">Navegar</button><button class="tab" id="search-tab" onclick="searchTab()">Buscar</button>
         </p>
         <hr class="hr">
         <p id="loading">Loading search...</p>
@@ -24,8 +24,8 @@
           <div id="output"></div>
         </div>
         <div id="browse" hidden>
-          <div id="browse-sort">Sort by: <button class="sort-button-browse" onclick="sortResults('oldest-first-browse')">oldest first</button> | <button class="sort-button-browse" onclick="sortResults('newest-first-browse')">newest first</button> | <button class="sort-button" onclick="sortResults('most-popular-browse')">most popular</button></div>
-          <p id="paging">Page <input id="page-num" type="number" /> of <span id="page-total">...</span> </p>
+          <div id="browse-sort">Ordenar por: <button class="sort-button-browse" onclick="sortResults('oldest-first-browse')">más antiguos primero</button> | <button class="sort-button-browse" onclick="sortResults('newest-first-browse')">más nuevos primero</button> | <button class="sort-button" onclick="sortResults('most-popular-browse')">más populares</button></div>
+          <p id="paging">Página <input id="page-num" type="number" /> of <span id="page-total">...</span> </p>
           <div id="browse-output"></div>
         </div>
       </div>
