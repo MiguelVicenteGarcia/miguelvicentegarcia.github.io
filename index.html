@@ -25,13 +25,19 @@
         </div>
         <div id="browse" hidden>
           <div id="browse-sort">Ordenar por: <button class="sort-button-browse" onclick="sortResults('oldest-first-browse')">más antiguos primero</button> | <button class="sort-button-browse" onclick="sortResults('newest-first-browse')">más nuevos primero</button> | <button class="sort-button" onclick="sortResults('most-popular-browse')">más populares</button></div>
-          <p id="paging">Página <input id="page-num" type="number" /> of <span id="page-total">...</span> </p>
+          <p id="paging">Página <input id="page-num" type="number" /> de <span id="page-total">...</span> </p>
           <div id="browse-output"></div>
         </div>
       </div>
       <p>This site was made with <a href="https://tinysubversions.com/twitter-archive/make-your-own/">this Twitter archiving tool</a>.</p>
     </div>
   </div>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+      browseTab(); // Activa la pestaña "Navegar" por defecto
+  });
+</script>
+
 </body>
 <script src="searchDocuments.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/nextapps-de/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
