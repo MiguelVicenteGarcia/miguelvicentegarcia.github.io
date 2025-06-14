@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@Sign_in_music Twitter archive</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .yt-container iframe {
+      width: 100%;
+      max-width: 100%;
+      height: 315px;
+      border: none;
+    }
+  </style>
 </head>
 <body>
   <div class="wrapper">
@@ -49,60 +57,72 @@
   <script src="https://cdn.jsdelivr.net/gh/nextapps-de/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
   <script src="app.js"></script>
 
-  <!-- YouTube Embed Script -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      browseTab();
+      browseTab(); // activa pestaña por defecto
 
-      function embedYouTube() {
-        const containers = document.querySelectorAll('.tweet, #output, #browse-output');
-        containers.forEach(container => {
-          const html = container.innerHTML;
-
-          const updated = html
-            .replace(/https:\/\/www\.youtube\.com\/watch\?v=([\w-]{11})([^\s<]*)/g, (_, id, extra) => {
-              const params = new URLSearchParams(extra);
-              const t = params.get("t") || params.get("start");
-              const startParam = t ? `?start=${parseInt(t)}` : "";
-              return `<div class="yt-container" data-id="${id}" data-start="${startParam}">
-                <iframe src="https://www.youtube.com/embed/${id}${startParam}" allowfullscreen></iframe>
-              </div>`;
-            })
-            .replace(/https:\/\/youtu\.be\/([\w-]{11})([^\s<]*)/g, (_, id, extra) => {
-              const params = new URLSearchParams(extra);
-              const t = params.get("t") || params.get("start");
-              const startParam = t ? `?start=${parseInt(t)}` : "";
-              return `<div class="yt-container" data-id="${id}" data-start="${startParam}">
-                <iframe src="https://www.youtube.com/embed/${id}${startParam}" allowfullscreen></iframe>
-              </div>`;
-            });
-
-          container.innerHTML = updated;
-        });
-
-        // Reemplazar iframe no cargables con enlace
-        setTimeout(() => {
-          const containers = document.querySelectorAll('.yt-container');
-          containers.forEach(div => {
-            const iframe = div.querySelector('iframe');
-            setTimeout(() => {
-              const height = iframe.clientHeight;
-              if (height === 0) {
-                const id = div.getAttribute('data-id');
-                const start = div.getAttribute('data-start');
-                const seconds = start ? start.replace("?start=", "") : "";
-                const link = document.createElement('a');
-                link.href = `https://www.youtube.com/watch?v=${id}${seconds ? `&t=${seconds}` : ""}`;
-                link.textContent = `Ver en YouTube: https://www.youtube.com/watch?v=${id}${seconds ? `&t=${seconds}` : ""}`;
-                link.target = "_blank";
-                div.replaceWith(link);
-              }
-            }, 2000);
-          });
-        }, 500);
+      function convertTimeParam(param) {
+        if (!param) return '';
+        const regex = /(?:(\d+)m)?(?:(\d+)s)?$/;
+        if (/^\d+$/.test(param)) return param;
+        const match = param.match(regex);
+        if (match) {
+          const mins = parseInt(match[1] || '0');
+          const secs = parseInt(match[2] || '0');
+          return mins * 60 + secs;
+        }
+        return '';
       }
 
-      setTimeout(embedYouTube, 500);
+      function embedYouTubeLinks(container) {
+        const links = container.querySelectorAll("a[href*='youtube.com/watch'], a[href*='youtu.be/']");
+
+        links.forEach(link => {
+          const url = new URL(link.href);
+          let videoId = null;
+          let t = null;
+
+          if (url.hostname.includes("youtube.com") && url.pathname === "/watch") {
+            videoId = url.searchParams.get("v");
+            t = url.searchParams.get("t") || url.searchParams.get("start");
+          } else if (url.hostname === "youtu.be") {
+            videoId = url.pathname.slice(1);
+            t = url.searchParams.get("t") || url.searchParams.get("start");
+          }
+
+          if (videoId) {
+            const seconds = convertTimeParam(t);
+            const iframe = document.createElement("iframe");
+            iframe.src = `https://www.youtube.com/embed/${videoId}${seconds ? `?start=${seconds}` : ""}`;
+            iframe.allowFullscreen = true;
+
+            const containerDiv = document.createElement("div");
+            containerDiv.className = "yt-container";
+            containerDiv.appendChild(iframe);
+
+            // fallback: esperar a ver si el video se puede cargar
+            setTimeout(() => {
+              if (iframe.clientHeight === 0) {
+                const newLink = document.createElement("a");
+                newLink.href = `https://www.youtube.com/watch?v=${videoId}${seconds ? `&t=${seconds}` : ""}`;
+                newLink.textContent = `Ver en YouTube`;
+                newLink.target = "_blank";
+                containerDiv.replaceWith(newLink);
+              }
+            }, 2000);
+
+            link.replaceWith(containerDiv);
+          }
+        });
+      }
+
+      // Re-embed cuando cambia el contenido
+      const observer = new MutationObserver(() => {
+        document.querySelectorAll('.tweet, #output, #browse-output').forEach(embedYouTubeLinks);
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+
     });
   </script>
 </body>
