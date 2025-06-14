@@ -33,7 +33,7 @@ body {
   flex-direction: column;
 }
 .tweet {
-  background-color: #e8e8e8;
+  background-color: #FFFFFF;
   max-width: 660px; /* Ampliado 3 cm por cada lado */
   padding: 16px;
   font-family: sans-serif;
